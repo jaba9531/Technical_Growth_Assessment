@@ -26,7 +26,7 @@ It is up to you to ask GOOD, clarifying questions.
 	- Ex: React vs Angular vs Backbone
 
 ## Bare Minimum
-1. Schema Design
+1. Schema Design - Finished
 	- Flesh out your tables and the relationships
 	- Tables to consider: 
 		- Teams
@@ -37,7 +37,7 @@ It is up to you to ask GOOD, clarifying questions.
       - Stars
       - Reactions
       - Comments
-2. System Design
+2. System Design - 
 3. Create a RESTful API
 	- You do not need to support every type of request, just whatever is pertinent to the application
 4. Integration tests for each component in your back end
