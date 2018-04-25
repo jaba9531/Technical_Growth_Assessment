@@ -74,3 +74,29 @@ CREATE TABLE IF NOT EXISTS messagesreactions (
   FOREIGN KEY (messageid) references messages(id),
   FOREIGN KEY (reactionid) references reactions(id)
 );
+
+INSERT INTO teams(teamname)
+Values ('Brethren Studios');
+
+INSERT INTO channels(channelname, teamsid)
+Values ('General', (select id from teams where teamname = 'Brethren Studios'));
+
+INSERT INTO users(username)
+Values ("Gus");
+
+INSERT INTO users(username)
+Values ("Jake");
+
+INSERT INTO users(username)
+Values ("Nyancat");
+
+INSERT INTO teamusers(teamid, userid)
+VALUES ((SELECT id from teams where teamname = 'Brethren Studios'), (SELECT id from users where username = 'Jake'));
+
+--create an account (username and password)
+--on login, you are brought to a page where you can join a team or make a team
+--if you join a team, you will become a member of the team
+--you have to join a team before you can access it
+--there should be a list of existing teams to join
+
+
