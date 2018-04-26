@@ -1,23 +1,45 @@
+const express = require('express');
 const router = express.Router();
 const Controller = require('../Controller');
 
-router.post('/signup', (req, res) => {
-    Controller.signup(req, res);
-})
+/*-----------Team Routes------------------------*/
 
-router.get('/teamlist', Controller.team.teams);
+router.get('/userteamlist', Controller.team.usersTeams);
+router.get('/allteams', Controller.team.allTeams);
 router.get('/usersonteam', Controller.team.usersOnTeam);
 router.post('/addteam', Controller.team.addTeam);
+router.post('/adduserteam', Controller.team.addUser);
+//user would be added to team they created
+
+/*-----------Channel Routes------------------------*/
 
 router.get('/channellist', Controller.channel.teamChannelList);
+router.get('/userchannellist', Controller.channel.usersInChannel);
 router.post('/addchannel', Controller.channel.addChannel);
-router.post('/starchannel', Controller.channel.star);
+router.post('/adduserchannel', Controller.channel.addUser);
 
-router.get('/messages', Controller.message.messages);
-router.post('/addreaction', Controller.message.addReaction);
-router.post('/starmessage', Controller.message.star);
+/*-----------User Routes------------------------*/
+// router.post('/adduser', Controller.user.signup);
+// router.get('/loginuser', Controller.user.login);
+router.post('/starchannel', Controller.user.starChannel);
+router.post('/starmessage', Controller.user.starMessage);
 
-router.get('/stars', Controller.user.stars);
+
+/*-----------Message Routes------------------------*/
+router.post('/addmessage', Controller.message.addMessage);
+
+
+
+
+// router.post('/starchannel', Controller.channel.star);
+
+// router.get('/messages', Controller.message.messages);
+// router.post('/addreaction', Controller.message.addReaction);
+// router.post('/starmessage', Controller.message.star);
+
+// router.get('/stars', Controller.user.stars);
+
+module.exports = router;
 
 
 
