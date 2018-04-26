@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS teams (
 CREATE TABLE IF NOT EXISTS users (
   id int not null AUTO_INCREMENT,
   username varchar(25),
+  password varchar(100),
   PRIMARY KEY (id)
 );
 CREATE TABLE IF NOT EXISTS teamusers (

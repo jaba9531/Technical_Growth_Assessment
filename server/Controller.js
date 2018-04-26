@@ -113,6 +113,15 @@ const Controller = {
     },
   },
   user: {
+    signup: (req, res) => {
+      Models.user.signup(req, res, (err, results) => {
+        if (err) {
+          console.log(err);
+        } else {
+          res.status(200).send(results);
+        }
+      })
+    },
     starChannel: (req, res) => {
       var user = req.body.user;
       var channel = req.body.channel;

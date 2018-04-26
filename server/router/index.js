@@ -19,7 +19,7 @@ router.post('/addchannel', Controller.channel.addChannel);
 router.post('/adduserchannel', Controller.channel.addUser);
 
 /*-----------User Routes------------------------*/
-// router.post('/adduser', Controller.user.signup);
+router.post('/usersignup', Controller.user.signup);
 // router.get('/loginuser', Controller.user.login);
 router.post('/starchannel', Controller.user.starChannel);
 router.post('/starmessage', Controller.user.starMessage);

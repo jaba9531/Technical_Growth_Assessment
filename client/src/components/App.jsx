@@ -1,20 +1,33 @@
 import React from 'react';
 import axios from 'axios';
 import Login from './Login.jsx';
+import Signup from './Signup.jsx';
 import Landing from './Landing.jsx';
 
 class App extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       signup: false,
-      isLoggedIn: localStorage.isLoggedIn,
-    }
+      isLoggedIn: false,
+    } 
   }
 
   //before app mounts, send a reqest to confirm logged in state
+
+  renderSignup() {
+    this.setState({
+      signup: true
+    })
+  }
+
+  renderLogin() {
+    this.setState({
+      signup: false
+    })
+  }
+
   render() {
-    console.log(localStorage);
     return (
       <div>
         {
@@ -27,11 +40,11 @@ class App extends React.Component {
             {
               this.state.signup ?
               <div>
-                <Signup/>
+                <Signup renderLogin={this.renderLogin.bind(this)}/>
               </div>
               :
               <div>
-                <Login/>
+                <Login renderSignup={this.renderSignup.bind(this)}/>
               </div>
             }
           </div>

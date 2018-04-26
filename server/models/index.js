@@ -1,4 +1,7 @@
 const db = require('../DB');
+const passport = require('passport');
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
 
 const Models = {
   team: {
@@ -98,6 +101,26 @@ const Models = {
     }
   },
   user: {
+    signup: (req, res, cb) => {
+      var username = req.body.username;
+      var password = req.body.password;
+      bcrypt.hash(password, saltRounds, function(err, hash) {
+        var uniqueUserQuery = `select username from users where username = ${JSON.stringify(username)}`;
+        db.query(uniqueUserQuery, (err, results) => {
+          if (results.length < 1) {
+            var query = `INSERT INTO users (username, password) VALUES (${JSON.stringify(username)}, ${JSON.stringify(hash)})`;
+            db.query(query, (err, results) => {
+              if (err) {
+                throw err;
+              }
+              cb (null, 'success');
+            })
+          } else {
+            cb(err, 'taken');
+          }
+        })
+      })
+    },
     starChannel: (user, channel, cb) => {
       var query = `insert into stars (channelid, userid) values ((select id from channels where channelname = ${JSON.stringify(channel)}), (select id from users where username = ${JSON.stringify(user)}))`;
       db.query(query, (err, results) => {
@@ -118,6 +141,14 @@ const Models = {
     },
   }
 }
+
+passport.serializeUser(function(id, done) {
+  done(null, id);
+});
+
+passport.deserializeUser(function(id, done) {
+  done(null, id);
+});
 
 module.exports = Models;
 
