@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 
 class Login extends React.Component {
   constructor(props) {
@@ -21,6 +22,23 @@ class Login extends React.Component {
     console.log(this.state.password);
   }
 
+  handleLoginButtonClick() {
+    var payload = {username: this.state.username, password: this.state.password};
+    axios.post('http://localhost:3000/api/userlogin/', payload) 
+    .then((response) => {
+      console.log('here is the login response', response);
+      if (response.data === 'failed') {
+        console.log('incorrect username and/or password');
+      }
+      if (response.data === 'success') {
+        console.log('Login successful');
+      }
+    })
+    .catch ((err) => {
+      console.log(err);
+    })
+  }
+
   render() {
     return (
       <div>
@@ -34,7 +52,7 @@ class Login extends React.Component {
           <input type="text" name="password" value={this.state.password} onChange={this.handlePasswordInputValueChange}/>
         </label>
         <div>
-          <button type="button">Login</button>
+          <button type="button" onClick={() => {this.handleLoginButtonClick()}}>Login</button>
         </div>
         <div>
           <button type="button" onClick={() => {this.props.renderSignup()}} >Sign Up</button>

@@ -3,6 +3,7 @@ import axios from 'axios';
 import Login from './Login.jsx';
 import Signup from './Signup.jsx';
 import Landing from './Landing.jsx';
+import Workspacehub from './Workspacehub.jsx';
 
 class App extends React.Component {
   constructor(props) {
@@ -33,7 +34,7 @@ class App extends React.Component {
         {
           this.state.isLoggedIn ?
           <div>
-            <Landing/>
+            <Workspacehub/>
           </div>
           : 
           <div>

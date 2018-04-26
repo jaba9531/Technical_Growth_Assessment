@@ -2,6 +2,7 @@ const db = require('../DB');
 const passport = require('passport');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
+const express = require('express');
 
 const Models = {
   team: {
@@ -121,6 +122,31 @@ const Models = {
         })
       })
     },
+    login: (req, res, next, cb) => {
+      passport.authenticate('local', (err, user, info) => {
+        console.log(err, 'err', user, 'user', info, 'info');
+        if (err) {
+          cb(err, 'error');
+        } else if (info) {
+          cb(null, 'unauthorized');
+        } else {
+          req.login(user, (err) => {
+            if (err) {
+              res.status(200).send('failed');
+            } else {
+              cb(null, 'success');
+            }
+          })
+        }
+      })(req, res, next);
+      passport.serializeUser(function(id, done) {
+        done(null, id);
+      });
+      
+      passport.deserializeUser(function(id, done) {
+        done(null, id);
+      });
+    },
     starChannel: (user, channel, cb) => {
       var query = `insert into stars (channelid, userid) values ((select id from channels where channelname = ${JSON.stringify(channel)}), (select id from users where username = ${JSON.stringify(user)}))`;
       db.query(query, (err, results) => {
@@ -141,14 +167,6 @@ const Models = {
     },
   }
 }
-
-passport.serializeUser(function(id, done) {
-  done(null, id);
-});
-
-passport.deserializeUser(function(id, done) {
-  done(null, id);
-});
 
 module.exports = Models;
 

@@ -122,6 +122,15 @@ const Controller = {
         }
       })
     },
+    login: (req, res, next) => {
+      Models.user.login(req, res, next, (err, results) => {
+        if (err) {
+          console.log(err);
+        } else {
+          res.status(200).send(results);
+        }
+      })
+    },
     starChannel: (req, res) => {
       var user = req.body.user;
       var channel = req.body.channel;

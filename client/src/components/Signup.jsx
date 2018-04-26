@@ -29,7 +29,6 @@ class Signup extends React.Component {
       if (response.data === 'taken') {
         this.setState({toggleUsernameTakenMessage: true});
         this.setState({toggleAccountSuccessfullyCreatedMessage: false});
-        // this.props.isLoggedInHandler();
         console.log('username already taken');
       } else {
         this.setState({toggleUsernameTakenMessage: false});
