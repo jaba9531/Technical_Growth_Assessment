@@ -108,7 +108,6 @@ const Models = {
       })
     },
     starMessage: (user, message, cb) => {
-      console.log("hey" + message + "hey");
       var query = `insert into stars (messageid, userid) values ((select id from messages where textfield = ${JSON.stringify(message)}), (select id from users where username = ${JSON.stringify(user)}))`;
       db.query(query, (err, results) => {
         if (err) {

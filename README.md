@@ -37,10 +37,10 @@ It is up to you to ask GOOD, clarifying questions.
       - Stars
       - Reactions
       - Comments
-2. System Design - 
-3. Create a RESTful API
+2. System Design - finished
+3. Create a RESTful API - finished
 	- You do not need to support every type of request, just whatever is pertinent to the application
-4. Integration tests for each component in your back end
+4. Integration tests for each component in your back end - finished
 	- Jest is a solid option! But explore Mocha/Chai, Jasmine, etc. 
 	- You may not proceed until you write tests for each component
 	- You may need to refactor some tests to accommodate certain features
