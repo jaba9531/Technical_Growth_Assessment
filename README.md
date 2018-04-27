@@ -44,7 +44,7 @@ It is up to you to ask GOOD, clarifying questions.
 	- Jest is a solid option! But explore Mocha/Chai, Jasmine, etc. 
 	- You may not proceed until you write tests for each component
 	- You may need to refactor some tests to accommodate certain features
-5. Authentication system
+5. Authentication system - finished
 	- Using Passport.js, bcrypt
 	- Utilize the local strategy
 		- Look into the `next()` function in Nodejs!

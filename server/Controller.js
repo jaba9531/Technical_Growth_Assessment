@@ -37,7 +37,7 @@ const Controller = {
           console.log('anything!');
           console.log(err);
         } else {
-          res.status(200).send(results);
+          res.status(202).send(results);
         }
       });
     },
@@ -48,14 +48,15 @@ const Controller = {
         if (err) {
           console.log(err);
         } else {
-          res.status(200).send(results);
+          res.status(202).send(results);
         }
       });
     },
   },
   channel: {
     teamChannelList: (req, res) => {
-      Models.channel.teamChannelList('Micro Center', (err, results) => {
+      var teamName = req.headers.teamname;
+      Models.channel.teamChannelList(teamName, (err, results) => {
         if (err) {
           console.log(err);
         } else {
@@ -72,7 +73,7 @@ const Controller = {
         if (err) {
           console.log(err);
         } else {
-          res.status(200).send(results);
+          res.status(202).send(results);
         }
       });
     },
@@ -83,7 +84,7 @@ const Controller = {
         if (err) {
           console.log(err);
         } else {
-          res.status(200).send(results);
+          res.status(202).send(results);
         }
       });
     },
@@ -101,16 +102,27 @@ const Controller = {
   message: {
     addMessage: (req, res) => {
       var message = req.body.message;
-      var user = req.body.user;
+      var user = req.session.passport.user;
       var channel = req.body.channel;
+      console.log(channel);
       Models.message.addMessage(message, user, channel, (err, results) => {
+        if (err) {
+          console.log(err);
+        } else {
+          res.status(202).send(results);
+        }
+      });
+    },
+    messages: (req, res) => {
+      var channelName = req.headers.channelname;
+      Models.message.messages(channelName, (err, results) => {
         if (err) {
           console.log(err);
         } else {
           res.status(200).send(results);
         }
-      });
-    },
+      })
+    }
   },
   user: {
     signup: (req, res) => {
@@ -118,12 +130,30 @@ const Controller = {
         if (err) {
           console.log(err);
         } else {
-          res.status(200).send(results);
+          res.status(202).send(results);
         }
       })
     },
     login: (req, res, next) => {
       Models.user.login(req, res, next, (err, results) => {
+        if (err) {
+          console.log(err);
+        } else {
+          res.status(202).send(results);
+        }
+      })
+    },
+    logout: (req, res) => {
+      Models.user.logout(req, res, (err, results) => {
+        if (err) {
+          console.log(err);
+        } else {
+          res.status(202).send(results);
+        }
+      })
+    },
+    checkLoginStatus: (req, res) => {
+      Models.user.checkLoginStatus(req, res, (err, results) => {
         if (err) {
           console.log(err);
         } else {
@@ -138,7 +168,7 @@ const Controller = {
         if (err) {
           console.log(err);
         } else {
-          res.status(200).send(results);
+          res.status(202).send(results);
         }
       });
     },
@@ -149,7 +179,7 @@ const Controller = {
         if (err) {
           console.log(err);
         } else {
-          res.status(200).send(results);
+          res.status(202).send(results);
         }
       });
     },

@@ -34,7 +34,7 @@ const Models = {
       })
     },
     addTeam: (teamName, cb) => {
-      var query = `INSERT INTO teams(teamname) Values (${JSON.stringify(teamName)})`;
+      var query = `INSERT IGNORE INTO teams(teamname) Values (${JSON.stringify(teamName)})`;
       db.query(query, (err, results) => {
         if (err) {
           throw err;
@@ -99,6 +99,15 @@ const Models = {
         }
         cb(null, results);
       })
+    },
+    messages: (channel, cb) => {
+      var query = `select * from messages where channelid = (select id from channels where channelname = ${JSON.stringify(channel)})`;
+      db.query(query, (err, results) => {
+        if (err) {
+          throw err;
+        }
+        cb(null, results);
+      })
     }
   },
   user: {
@@ -146,6 +155,26 @@ const Models = {
       passport.deserializeUser(function(id, done) {
         done(null, id);
       });
+    },
+    logout: (req, res, cb) => {
+      req.logout(); 
+      req.session.destroy();
+      res.status(202).send('destroyed');
+      passport.serializeUser(function(id, done) {
+        done(null, id);
+      });
+      
+      passport.deserializeUser(function(id, done) {
+        done(null, id);
+      });
+    },
+    checkLoginStatus: (req, res, cb) => {
+      console.log(req.session, '$$$$$$$$$$$$$');
+      if (req.session.hasOwnProperty('passport')) {
+        cb(null, 'confirmed');
+      } else {
+        cb(null, 'denied');
+      }
     },
     starChannel: (user, channel, cb) => {
       var query = `insert into stars (channelid, userid) values ((select id from channels where channelname = ${JSON.stringify(channel)}), (select id from users where username = ${JSON.stringify(user)}))`;

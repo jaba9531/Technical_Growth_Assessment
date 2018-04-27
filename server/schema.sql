@@ -2,7 +2,7 @@ CREATE DATABASE IF NOT EXISTS slacker;
 USE slacker;
 CREATE TABLE IF NOT EXISTS teams (
   id int not null AUTO_INCREMENT,
-  teamname varchar(25),
+  teamname varchar(25) UNIQUE,
   PRIMARY KEY (id)
 );
 CREATE TABLE IF NOT EXISTS users (

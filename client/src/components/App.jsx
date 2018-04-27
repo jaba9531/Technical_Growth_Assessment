@@ -2,7 +2,6 @@ import React from 'react';
 import axios from 'axios';
 import Login from './Login.jsx';
 import Signup from './Signup.jsx';
-import Landing from './Landing.jsx';
 import Workspacehub from './Workspacehub.jsx';
 
 class App extends React.Component {
@@ -11,6 +10,7 @@ class App extends React.Component {
     this.state = {
       signup: false,
       isLoggedIn: false,
+      view: '',
     } 
   }
 
@@ -28,13 +28,32 @@ class App extends React.Component {
     })
   }
 
+  loginStatusUpdater() {
+    this.setState({isLoggedIn: true});
+  }
+
+  logoutStatusUpdater() {
+    this.setState({isLoggedIn: false});
+  }
+
+  componentWillMount() {
+    //make request to server to check login state
+    axios.get('http://localhost:3000/api/checkloginstatus/')
+    .then((response) => {
+      console.log(response.data);
+      if (response.data === 'confirmed') {
+        this.setState({isLoggedIn: true});
+      }
+    })
+  }
+
   render() {
     return (
       <div>
         {
           this.state.isLoggedIn ?
           <div>
-            <Workspacehub/>
+            <Workspacehub logoutStatusUpdater={this.logoutStatusUpdater.bind(this)}/>
           </div>
           : 
           <div>
@@ -45,7 +64,7 @@ class App extends React.Component {
               </div>
               :
               <div>
-                <Login renderSignup={this.renderSignup.bind(this)}/>
+                <Login loginStatusUpdater = {this.loginStatusUpdater.bind(this)} renderSignup={this.renderSignup.bind(this)}/>
               </div>
             }
           </div>

@@ -19,23 +19,22 @@ router.post('/adduserchannel', Controller.channel.addUser);
 
 /*-----------User Routes------------------------*/
 
+router.get('/checkloginstatus', Controller.user.checkLoginStatus);
 router.post('/usersignup', Controller.user.signup);
 router.post('/userlogin', Controller.user.login);
+router.post('/userlogout', Controller.user.logout);
 router.post('/starchannel', Controller.user.starChannel);
 router.post('/starmessage', Controller.user.starMessage);
 
 /*-----------Message Routes------------------------*/
 router.post('/addmessage', Controller.message.addMessage);
+router.get('/channelmessages', Controller.message.messages);
 
 
 
-
-// router.post('/starchannel', Controller.channel.star);
 
 // router.get('/messages', Controller.message.messages);
 // router.post('/addreaction', Controller.message.addReaction);
-// router.post('/starmessage', Controller.message.star);
-
 // router.get('/stars', Controller.user.stars);
 
 module.exports = router;
