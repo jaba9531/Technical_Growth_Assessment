@@ -7,7 +7,7 @@ class Workspacehub extends React.Component {
     super(props);
     this.state = {
       teamname: '',
-      teams: [1, 2, 3],
+      teams: [],
       hubview: true,
       currentteam: '',
     }
