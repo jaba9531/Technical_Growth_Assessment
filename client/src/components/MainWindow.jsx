@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import io from 'socket.io-client';
 
 class MainWindow extends React.Component {
   constructor(props) {
@@ -11,6 +12,7 @@ class MainWindow extends React.Component {
       messageinput: '',
       messages: []
     }
+    this.socket = io('http://localhost:5000');
     this.handleMessageInputValueChange = this.handleMessageInputValueChange.bind(this);
     this.handleChannelNameDivClick = this.handleChannelNameDivClick.bind(this);
   }
@@ -31,6 +33,13 @@ class MainWindow extends React.Component {
     .catch (err => {
       console.log(err);
     }) 
+  }
+
+  componentDidMount() {
+    this.socket.on('servermessage', (msg) => {
+      console.log(msg, 'message from socket server');
+    })
+    //if 
   }
 
   handleNewChannelButtonClick() {
@@ -70,6 +79,8 @@ class MainWindow extends React.Component {
 
   handleSubmitMessageButtonClick() {
     console.log('click!');
+    //emit 'send-message', (msg)
+    this.socket.emit('message', {message: this.state.messageinput, channel: this.state.channel});
     var payload = {message: this.state.messageinput, channel: this.state.channel};
     axios.post('http://localhost:3000/api/addmessage', payload)
     .then((response) => {

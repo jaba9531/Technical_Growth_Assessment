@@ -90,10 +90,10 @@ It is up to you to ask GOOD, clarifying questions.
 3. Achieve Slack-like functionality
 	- It doesn't have to be the most scalable and perfect implementation
 	- I should be able to do the following:
-		- Create a Slack Team
+		- Create a Slack Team [x]
 		- Invite users to my Slack Team
-		- Create channels within my Slack Team
-		- Send messages to specific channels
+		- Create channels within my Slack Team [x]
+		- Send messages to specific channels [x]
 		- Direct Message users
 		- Toggle between the channels and DMs
 4. UI/UX should mirror Slack's Web App
