@@ -91,7 +91,7 @@ It is up to you to ask GOOD, clarifying questions.
 	- It doesn't have to be the most scalable and perfect implementation
 	- I should be able to do the following:
 		- Create a Slack Team [x]
-		- Invite users to my Slack Team
+		- Invite users to my Slack Team [x]
 		- Create channels within my Slack Team [x]
 		- Send messages to specific channels [x]
 		- Direct Message users

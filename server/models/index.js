@@ -33,13 +33,19 @@ const Models = {
         cb(null, results);
       })
     },
-    addTeam: (teamName, cb) => {
+    addTeam: (teamName, user, cb) => {
       var query = `INSERT IGNORE INTO teams(teamname) Values (${JSON.stringify(teamName)})`;
       db.query(query, (err, results) => {
         if (err) {
           throw err;
         }
-        cb(null, results);
+        var secondquery = `insert into teamusers(userid, teamid) values ((select id from users where username = ${JSON.stringify(user)}), (select id from teams where teamname = ${JSON.stringify(teamName)}))`;
+        db.query(secondquery, (err, results) => {
+          if (err) {
+            throw err;
+          }
+          cb(null, results);
+        })
       })
     },
     addUser: (newUser, team, cb) => {
@@ -170,7 +176,6 @@ const Models = {
       });
     },
     checkLoginStatus: (req, res, cb) => {
-      console.log(req.session, '$$$$$$$$$$$$$');
       if (req.session.hasOwnProperty('passport')) {
         cb(null, 'confirmed');
       } else {

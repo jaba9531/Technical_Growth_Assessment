@@ -19,15 +19,12 @@ class Workspacehub extends React.Component {
   handleLogoutButtonClick() {
     axios.post('http://localhost:3000/api/userlogout/')
     .then((response) => {
-      console.log('here is the logout response', response);
-      console.log(this, 'this in logout');
       this.props.logoutStatusUpdater();
     })
   }
 
   handleTeamnameInputValueChange(e) {
     this.setState({teamname: e.target.value});
-    console.log(this.state.teamname);
   }
 
   handleJoinButtonClick(value) {
@@ -42,21 +39,18 @@ class Workspacehub extends React.Component {
     var payload = {item: this.state.teamname}
     axios.post('http://localhost:3000/api/addteam', payload)
     .then((response) => {
-      console.log('team added');
-      axios.get('http://localhost:3000/api/allteams')
-    .then((response) => {
-      console.log('here is the team list');
-      var teamList = [];
-      for (var i = 0; i < response.data.length; i++) {
-        teamList.push(response.data[i]);
-      }
-      this.setState({teams: teamList});
-      console.log(this.state.teams);
-    })
-    .catch( err => {
-      console.log(err);
-      done();
-    })
+      axios.get('http://localhost:3000/api/userteamlist')
+      .then((response) => {
+        var teamList = [];
+        for (var i = 0; i < response.data.length; i++) {
+          teamList.push(response.data[i]);
+        }
+        this.setState({teams: teamList, teamname: ''});
+      })
+      .catch( err => {
+        console.log(err);
+        done();
+      })
     })
     .catch( err => {
       console.log(err);
@@ -65,20 +59,24 @@ class Workspacehub extends React.Component {
   }
 
   componentWillMount() {
-    axios.get('http://localhost:3000/api/allteams')
+    axios.get('http://localhost:3000/api/userteamlist')
     .then((response) => {
-      console.log('here is the team list');
       var teamList = [];
       for (var i = 0; i < response.data.length; i++) {
         teamList.push(response.data[i]);
       }
       this.setState({teams: teamList});
-      console.log(this.state.teams);
     })
     .catch( err => {
       console.log(err);
       done();
     })
+  }
+
+  handleCreateTeamKeyPress(e) {
+    if (e.key === 'Enter') {
+      this.handleCreateTeamButtonClick();
+    }
   }
 
   render() {
@@ -91,10 +89,10 @@ class Workspacehub extends React.Component {
             <h4>Here you can make a team, or join a team that you have been invited to.</h4>
             <h4>Create Team</h4>
             <label>
-              <input type="text" name="teamname" value={this.state.teamname} onChange={this.handleTeamnameInputValueChange}/>
+              <input type="text" name="teamname" value={this.state.teamname} onChange={this.handleTeamnameInputValueChange} onKeyPress={(e) => this.handleCreateTeamKeyPress(e)}/>
             </label>
             <div>
-              <button type="button"onClick={this.handleCreateTeamButtonClick}>Create!</button>
+              <button type="button" onClick={this.handleCreateTeamButtonClick}>Create!</button>
             </div>
             <h4>Join Team</h4>
               {

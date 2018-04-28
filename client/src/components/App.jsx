@@ -41,7 +41,6 @@ class App extends React.Component {
     //make request to server to check login state
     axios.get('http://localhost:3000/api/checkloginstatus/')
     .then((response) => {
-      console.log(response.data);
       if (response.data === 'confirmed') {
         this.setState({isLoggedIn: true});
       }

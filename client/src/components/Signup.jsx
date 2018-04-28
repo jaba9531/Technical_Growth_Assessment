@@ -15,12 +15,10 @@ class Signup extends React.Component {
 
   handleUsernameInputValueChange(e) {
     this.setState({username: e.target.value});
-    console.log(this.state.username);
   }
 
   handlePasswordInputValueChange(e) {
     this.setState({password: e.target.value});
-    console.log(this.state.password);
   }
 
   handleSignupButtonClick() {
@@ -30,11 +28,9 @@ class Signup extends React.Component {
       if (response.data === 'taken') {
         this.setState({usernametakenmessage: true});
         this.setState({accountcreatedmessage: false});
-        console.log('username already taken');
       } else {
         this.setState({usernametakenmessage: false});
         this.setState({accountcreatedmessage: true});
-        console.log('Account successfully created');
       }
     })
   }
@@ -49,7 +45,7 @@ class Signup extends React.Component {
         </label>
         <h2>Password</h2>
         <label>
-          <input type="text" name="password" maxLength="25" value={this.state.password} onChange={this.handlePasswordInputValueChange}/>
+          <input type="password" name="password" maxLength="25" value={this.state.password} onChange={this.handlePasswordInputValueChange}/>
         </label>
         <div>
           <div>

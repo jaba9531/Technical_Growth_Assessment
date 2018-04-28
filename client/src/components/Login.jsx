@@ -15,25 +15,20 @@ class Login extends React.Component {
 
   handleUsernameInputValueChange(e) {
     this.setState({username: e.target.value});
-    console.log(this.state.username);
   }
 
   handlePasswordInputValueChange(e) {
     this.setState({password: e.target.value});
-    console.log(this.state.password);
   }
 
   handleLoginButtonClick() {
     var payload = {username: this.state.username, password: this.state.password};
     axios.post('http://localhost:3000/api/userlogin/', payload) 
     .then((response) => {
-      console.log('here is the login response', response);
-      console.log(response, 'login response');
       if (response.data === 'failed') {
         this.setState({incorrectloginmessage: true});
       }
       else {
-        console.log('Login successfull');
         this.props.loginStatusUpdater();
       }
     })
@@ -52,7 +47,7 @@ class Login extends React.Component {
         </label>
         <h2>Password</h2>
         <label>
-          <input type="text" name="password" value={this.state.password} onChange={this.handlePasswordInputValueChange}/>
+          <input type="password" name="password" value={this.state.password} onChange={this.handlePasswordInputValueChange}/>
         </label>
         <div>
           <button type="button" onClick={() => {this.handleLoginButtonClick()}}>Login</button>

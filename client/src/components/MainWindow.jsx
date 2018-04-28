@@ -38,7 +38,6 @@ class MainWindow extends React.Component {
         for (var i = 0; i < response.data.length; i++) {
           usersonteam.push(response.data[i].username);
         }
-        console.log(usersonteam);
         this.setState({team: team, channels: channels, loggedInUser: loggedInUser, teammembers: usersonteam});
       })
       .catch(err => {
@@ -52,14 +51,11 @@ class MainWindow extends React.Component {
 
   componentDidMount() {
     this.socket.on('connect', () => {
-      console.log('connect$$$$$$ componentdidmount');
     });
     this.socket.on('servermessage', (msg) => {
-      console.log('inside componentdidmount');
       if (msg.channel === this.state.channel) {
         var messages = this.state.messages;
         var usernames = this.state.usernames;
-        console.log(msg, 'msg in didmount ');
         messages.unshift(msg.message);
         usernames.unshift(msg.user);
         this.setState({messages: messages, usernames: usernames, messageinput: ''});
@@ -68,9 +64,7 @@ class MainWindow extends React.Component {
   }
 
   handleNewChannelButtonClick() {
-    console.log('click!');
     var channelInput = window.prompt('Enter a new channel name: '); 
-    console.log(channelInput);
     if (channelInput !== null) {
       if (channelInput.length > 0 && channelInput.length < 26) {
         var payload = {team: this.state.team, channel: channelInput};
@@ -103,12 +97,10 @@ class MainWindow extends React.Component {
 
   handleMessageInputValueChange(e) {
     this.setState({messageinput: e.target.value});
-    console.log(this.state.messageinput);
   }
 
   handleFriendInputValueChange(e) {
     this.setState({friendinput: e.target.value});
-    console.log(this.state.friendinput);
   }
 
   handleKeyPress(e) {
@@ -124,8 +116,6 @@ class MainWindow extends React.Component {
   }
 
   handleSubmitMessageButtonClick() {
-    console.log('click!');
-    //emit 'send-message', (msg)
     this.socket.emit('message', {message: this.state.messageinput, channel: this.state.channel, user: this.state.loggedInUser});
     var payload = {message: this.state.messageinput, channel: this.state.channel};
     axios.post('http://localhost:3000/api/addmessage', payload)
@@ -138,19 +128,14 @@ class MainWindow extends React.Component {
   }
 
   handleChannelNameDivClick(e) {
-    console.log(e);
-    console.log('click!');
     var messages = [];
     var usernames = [];
     axios.get('http://localhost:3000/api/channelmessages', {headers : { 'channelname' : e }})
     .then((response) => {
       for (var i = response.data.length - 1; i >= 0; i--) {
-        console.log(response, 'messages response here!');
         messages.push(response.data[i].textfield);
         usernames.push(response.data[i].username);
-        console.log(this.state.messages, 'state of messages');
       }
-      console.log(response.data);
       this.setState({channel: e, messages: messages, usernames: usernames});
     })
     .catch (err => {
@@ -159,7 +144,6 @@ class MainWindow extends React.Component {
   }
 
   render() {
-    console.log(this.state);
     return (
       <div>
         <div id="left">
