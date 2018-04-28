@@ -34,6 +34,10 @@ class Workspacehub extends React.Component {
     this.setState({currentteam: value, hubview: false});
   }
 
+  hubViewRender() {
+    this.setState({hubview: true});
+  }
+
   handleCreateTeamButtonClick() {
     var payload = {item: this.state.teamname}
     axios.post('http://localhost:3000/api/addteam', payload)
@@ -84,15 +88,15 @@ class Workspacehub extends React.Component {
           this.state.hubview === true ?
           <div>
             <h1>Workspace Hub</h1>
-            <h2>Here you can make a team, or join a team that you are a member of</h2>
-            <h3>Create Team</h3>
+            <h4>Here you can make a team, or join a team that you have been invited to.</h4>
+            <h4>Create Team</h4>
             <label>
               <input type="text" name="teamname" value={this.state.teamname} onChange={this.handleTeamnameInputValueChange}/>
             </label>
             <div>
               <button type="button"onClick={this.handleCreateTeamButtonClick}>Create!</button>
             </div>
-            <h3>Join Team?</h3>
+            <h4>Join Team</h4>
               {
                 this.state.teams.map(value =>
                   <div key={Math.floor((Math.random() * 1000000) + 1)}>
@@ -101,7 +105,6 @@ class Workspacehub extends React.Component {
                     </span>
                     <button value={value.teamname} onClick={()=>this.handleJoinButtonClick(value.teamname)}>join</button>
                   </div>
-                  // <Post handleClick={this.props.handleClick} key={post.id} post={post} view={this.props.view} liked={this.props.liked} currentUserProfilePhoto={this.props.userInfo.userPhotoUrl}/>
                 )
               }
             <div>
@@ -110,7 +113,7 @@ class Workspacehub extends React.Component {
           </div>
           :
           <div>
-            <MainWindow team={this.state.currentteam}/>
+            <MainWindow team={this.state.currentteam} hubViewRender = {this.hubViewRender.bind(this)}/>
           </div>
         }
       </div>

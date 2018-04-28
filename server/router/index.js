@@ -31,12 +31,6 @@ router.post('/addmessage', Controller.message.addMessage);
 router.get('/channelmessages', Controller.message.messages);
 
 
-
-
-// router.get('/messages', Controller.message.messages);
-// router.post('/addreaction', Controller.message.addReaction);
-// router.get('/stars', Controller.user.stars);
-
 module.exports = router;
 
 

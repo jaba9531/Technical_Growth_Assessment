@@ -10,25 +10,40 @@ class MainWindow extends React.Component {
       channels: [],
       channel: '',
       messageinput: '',
-      messages: []
+      messages: [],
+      usernames: [],
+      loggedInUser: '',
+      friendinput: '',
+      teammembers: [],
     }
     this.socket = io('http://localhost:5000');
     this.handleMessageInputValueChange = this.handleMessageInputValueChange.bind(this);
     this.handleChannelNameDivClick = this.handleChannelNameDivClick.bind(this);
+    this.handleFriendInputValueChange = this.handleFriendInputValueChange.bind(this);
   }
 
   componentWillMount() {
     var team = this.props.team;
     var channels = [];
-    console.log(this.props.team, 'teamnameincomponentwillmountinmainwindow');
+    var loggedInUser;
+    var usersonteam = [];
     axios.get('http://localhost:3000/api/channellist', {headers : { 'teamname' : team }})
     .then((response) => {
-      console.log(response.data, 'teamchannelsresponse');
+      loggedInUser = response.headers.name;
       for (var i = 0; i < response.data.length; i++) {
         channels.push(response.data[i].channelname);
       }
-      this.setState({team: team, channels: channels});
-      console.log(channels);
+      axios.get('http://localhost:3000/api/usersonteam', {headers : { 'teamname' : team }})
+      .then((response) => {
+        for (var i = 0; i < response.data.length; i++) {
+          usersonteam.push(response.data[i].username);
+        }
+        console.log(usersonteam);
+        this.setState({team: team, channels: channels, loggedInUser: loggedInUser, teammembers: usersonteam});
+      })
+      .catch(err => {
+        console.log(err);
+      })
     })
     .catch (err => {
       console.log(err);
@@ -43,8 +58,11 @@ class MainWindow extends React.Component {
       console.log('inside componentdidmount');
       if (msg.channel === this.state.channel) {
         var messages = this.state.messages;
+        var usernames = this.state.usernames;
+        console.log(msg, 'msg in didmount ');
         messages.unshift(msg.message);
-        this.setState({messages: messages, messageinput: ''});
+        usernames.unshift(msg.user);
+        this.setState({messages: messages, usernames: usernames, messageinput: ''});
       }
     })
   }
@@ -73,9 +91,24 @@ class MainWindow extends React.Component {
     }
   }
 
+  handleSubmitFriendButtonClick() {
+    var payload = {user: this.state.friendinput, team: this.state.team};
+    axios.post('http://localhost:3000/api/adduserteam', payload)
+    .then((response) => {
+      var arr = this.state.teammembers;
+      arr.unshift(this.state.friendinput);
+      this.setState({friendinput: '', teammembers: arr});
+    })
+  }
+
   handleMessageInputValueChange(e) {
     this.setState({messageinput: e.target.value});
     console.log(this.state.messageinput);
+  }
+
+  handleFriendInputValueChange(e) {
+    this.setState({friendinput: e.target.value});
+    console.log(this.state.friendinput);
   }
 
   handleKeyPress(e) {
@@ -84,10 +117,16 @@ class MainWindow extends React.Component {
     }
   }
 
+  handleFriendKeyPress(e) {
+    if (e.key === 'Enter') {
+      this.handleSubmitFriendButtonClick();
+    }
+  }
+
   handleSubmitMessageButtonClick() {
     console.log('click!');
     //emit 'send-message', (msg)
-    this.socket.emit('message', {message: this.state.messageinput, channel: this.state.channel});
+    this.socket.emit('message', {message: this.state.messageinput, channel: this.state.channel, user: this.state.loggedInUser});
     var payload = {message: this.state.messageinput, channel: this.state.channel};
     axios.post('http://localhost:3000/api/addmessage', payload)
     .then((response) => {
@@ -102,13 +141,17 @@ class MainWindow extends React.Component {
     console.log(e);
     console.log('click!');
     var messages = [];
+    var usernames = [];
     axios.get('http://localhost:3000/api/channelmessages', {headers : { 'channelname' : e }})
     .then((response) => {
       for (var i = response.data.length - 1; i >= 0; i--) {
+        console.log(response, 'messages response here!');
         messages.push(response.data[i].textfield);
+        usernames.push(response.data[i].username);
+        console.log(this.state.messages, 'state of messages');
       }
       console.log(response.data);
-      this.setState({channel: e, messages: messages});
+      this.setState({channel: e, messages: messages, usernames: usernames});
     })
     .catch (err => {
       console.log(err);
@@ -116,6 +159,7 @@ class MainWindow extends React.Component {
   }
 
   render() {
+    console.log(this.state);
     return (
       <div>
         <div id="left">
@@ -142,21 +186,48 @@ class MainWindow extends React.Component {
           </div>
         </div>
         <div id="right">
-        {
-          this.state.channel.length > 0 ?
-          <div>  
-            {this.state.channel}
-          </div>
-          :
-          <div>
-            No Channel Selected
-          </div>
-        }
+        <div className="channelname">
+          {
+            this.state.channel.length > 0 ?
+            <span className="channelname">  
+              {this.state.channel}
+              <span className="teammemberlistbox">
+                Team Members
+                <div className="membername">
+                {
+                  this.state.teammembers.map(value => 
+                    <div key={Math.floor((Math.random() * 1000000) + 1)}>
+                      {value}
+                    </div>
+                  )
+                }
+              </div>
+              </span>
+            </span>
+            :
+            <span className="channelname">
+              Select or make a channel to get started!
+            <span className="teammemberlistbox">
+              Team Members
+              <div className="membername">
+                {
+                  this.state.teammembers.map(value => 
+                    <div key={Math.floor((Math.random() * 1000000) + 1)}>
+                      {value}
+                    </div>
+                  )
+                }
+              </div>
+            </span>
+          </span> 
+          }
+        </div>
         </div>
         <div id="rightmiddle">
           {
-            this.state.messages.map(value => 
-              <div value={value} key={Math.floor((Math.random() * 1000000) + 1)}>
+            this.state.messages.map((value, i) => 
+              <div className="messagebox" value={value} key={Math.floor((Math.random() * 1000000) + 1)}>
+                <div className="messageUsername">{this.state.usernames[i]}</div>
                 <div className="message">
                   {value}
                 </div>
@@ -171,12 +242,23 @@ class MainWindow extends React.Component {
           <label>
             <input id="messageInput" type="text" value={this.state.messageinput} onKeyPress={(e) => this.handleKeyPress(e)} onChange={this.handleMessageInputValueChange}/>
             <button onClick={() => {this.handleSubmitMessageButtonClick()}}>Submit</button>
-          </label>  
+          </label>
+          <label id="inviteFriendInput">
+            <input type="text" value={this.state.friendinput} onKeyPress={(e) => this.handleFriendKeyPress(e)} onChange={this.handleFriendInputValueChange}/>
+            <button onClick={() => {this.handleSubmitFriendButtonClick()}}>Invite Friend</button>
+          </label>   
           </div>
           :
           <div>
+            <label id="inviteFriendInput">
+              <input type="text" value={this.state.friendinput} onKeyPress={(e) => this.handleFriendKeyPress(e)} onChange={this.handleFriendInputValueChange}/>
+              <button onClick={() => {this.handleSubmitFriendButtonClick()}}>Invite Friend</button>
+            </label>
           </div>
         }
+          <div>
+            <button onClick={() => {this.props.hubViewRender()}} id="backhubbutton">Back to Hub</button>
+          </div>
         </div>
       </div>
     );

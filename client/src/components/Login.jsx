@@ -7,6 +7,7 @@ class Login extends React.Component {
     this.state = {
       username: '',
       password: '',
+      incorrectloginmessage: false,
     }
     this.handleUsernameInputValueChange = this.handleUsernameInputValueChange.bind(this);
     this.handlePasswordInputValueChange = this.handlePasswordInputValueChange.bind(this);
@@ -27,10 +28,11 @@ class Login extends React.Component {
     axios.post('http://localhost:3000/api/userlogin/', payload) 
     .then((response) => {
       console.log('here is the login response', response);
+      console.log(response, 'login response');
       if (response.data === 'failed') {
-        console.log('incorrect username and/or password');
+        this.setState({incorrectloginmessage: true});
       }
-      if (response.data === 'success') {
+      else {
         console.log('Login successfull');
         this.props.loginStatusUpdater();
       }
@@ -56,7 +58,17 @@ class Login extends React.Component {
           <button type="button" onClick={() => {this.handleLoginButtonClick()}}>Login</button>
         </div>
         <div>
-          <button type="button" onClick={() => {this.props.renderSignup()}} >Sign Up</button>
+          <button type="button" onClick={() => {this.props.renderSignup()}} >Go to Signup Page</button>
+        </div>
+        <div>
+          {this.state.incorrectloginmessage ?
+            <div>
+            Incorrect Login Credentials
+            </div>
+            :
+            <div>
+          </div>
+          }
         </div>
       </div>
     );

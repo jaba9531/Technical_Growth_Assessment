@@ -7,6 +7,7 @@ class Signup extends React.Component {
     this.state = {
       username: '',
       password: '',
+      usernametakenmessage: false,
     }
     this.handleUsernameInputValueChange = this.handleUsernameInputValueChange.bind(this);
     this.handlePasswordInputValueChange = this.handlePasswordInputValueChange.bind(this);
@@ -27,12 +28,12 @@ class Signup extends React.Component {
     axios.post('http://localhost:3000/api/usersignup/', payload)
     .then((response) => {
       if (response.data === 'taken') {
-        this.setState({toggleUsernameTakenMessage: true});
-        this.setState({toggleAccountSuccessfullyCreatedMessage: false});
+        this.setState({usernametakenmessage: true});
+        this.setState({accountcreatedmessage: false});
         console.log('username already taken');
       } else {
-        this.setState({toggleUsernameTakenMessage: false});
-        this.setState({toggleAccountSuccessfullyCreatedMessage: true});
+        this.setState({usernametakenmessage: false});
+        this.setState({accountcreatedmessage: true});
         console.log('Account successfully created');
       }
     })
@@ -55,8 +56,28 @@ class Signup extends React.Component {
             <button type="button" onClick={() => {this.handleSignupButtonClick()}} >Create Account</button>
           </div>
           <div>
-            <button type="button" onClick={() => {this.props.renderLogin()}}>Back to Login</button>
+            <button type="button" onClick={() => {this.props.renderLogin()}}>Back to Login Page</button>
           </div>
+        </div>
+        <div>
+          {this.state.usernametakenmessage ?
+          <div>
+            Username Already Taken
+          </div>
+          :
+          <div>
+          </div>
+          }
+        </div>
+        <div>
+          {this.state.accountcreatedmessage ?
+          <div>
+          Account Successfully Created
+          </div>
+          :
+          <div>
+          </div>
+          }
         </div>
       </div>
     );

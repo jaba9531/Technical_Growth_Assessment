@@ -101,7 +101,8 @@ const Models = {
       })
     },
     messages: (channel, cb) => {
-      var query = `select * from messages where channelid = (select id from channels where channelname = ${JSON.stringify(channel)})`;
+      var query = `select * from messages as m inner join users as u on m.userid = u.id inner join channels as c where m.channelid = c.id and c.channelname = ${JSON.stringify(channel)} order by m.id`;
+      // ${JSON.stringify(channel)}
       db.query(query, (err, results) => {
         if (err) {
           throw err;
@@ -143,7 +144,7 @@ const Models = {
             if (err) {
               res.status(200).send('failed');
             } else {
-              cb(null, 'success');
+              cb(null, user);
             }
           })
         }

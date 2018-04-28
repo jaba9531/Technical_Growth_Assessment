@@ -21,7 +21,7 @@ const Controller = {
       });
     },
     usersOnTeam: (req, res) => {
-      console.log(req.url); 
+      var teamName = req.headers.teamname;
       Models.team.usersOnTeam('Micro Center', (err, results) => {
         if (err) {
           console.log(err);
@@ -60,7 +60,7 @@ const Controller = {
         if (err) {
           console.log(err);
         } else {
-          res.status(200).send(results);
+          res.set('name', req.session.passport.user).status(200).send(results);
         }
         //first I should just write this to get
         //channels of some specific team

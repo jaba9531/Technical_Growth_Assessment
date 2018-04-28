@@ -45,6 +45,12 @@ html, body {
 .channelBox {
     margin-bottom: 15px;
 }
+
+.channelname {
+    margin-left: 10px;
+    margin-top: 10px;
+    font-size: 25px;
+}
 .teamNameBox {
     margin-bottom: 15px;
 }
@@ -58,8 +64,51 @@ html, body {
     opacity:0.5;
 } 
 
+.message {
+    font-size: 17px;
+    margin-left: 8px;
+}
 
+.messageUsername {
+    font-weight: bold;
+    margin-left: 5px;
+    font-size: 17px;
+}
 
+.messagebox {
+    padding-top: 3px;
+    border-bottom: 1px dashed;
+    padding-bottom: 7px;
+}
+
+#inviteFriendInput {
+    margin-left: 10px;
+}
+
+.teammemberlistbox {
+    position: relative;
+    float: right;
+    font-size: 18px;
+    margin-right: 10px;
+    background-color: white;
+    border-radius: 5px;
+    height: 60px;
+    padding: 3px;
+}
+
+.membername {
+    font-size: 12px;
+    overflow-y: scroll;
+    height: 34px;
+}
+
+#backhubbutton {
+    margin-left: 10px;
+}
+
+#messageInput {
+    margin-left: 10px;
+}
 /* #3E313C */
 
 

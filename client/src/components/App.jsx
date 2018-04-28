@@ -11,6 +11,7 @@ class App extends React.Component {
       signup: false,
       isLoggedIn: false,
       view: '',
+      loggedInUser: '',
     } 
   }
 
