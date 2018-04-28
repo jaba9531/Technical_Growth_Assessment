@@ -36,10 +36,17 @@ class MainWindow extends React.Component {
   }
 
   componentDidMount() {
+    this.socket.on('connect', () => {
+      console.log('connect$$$$$$ componentdidmount');
+    });
     this.socket.on('servermessage', (msg) => {
-      console.log(msg, 'message from socket server');
+      console.log('inside componentdidmount');
+      if (msg.channel === this.state.channel) {
+        var messages = this.state.messages;
+        messages.unshift(msg.message);
+        this.setState({messages: messages, messageinput: ''});
+      }
     })
-    //if 
   }
 
   handleNewChannelButtonClick() {
@@ -84,9 +91,7 @@ class MainWindow extends React.Component {
     var payload = {message: this.state.messageinput, channel: this.state.channel};
     axios.post('http://localhost:3000/api/addmessage', payload)
     .then((response) => {
-      var messages = this.state.messages;
-      messages.push(this.state.messageinput);
-      this.setState({messages: messages, messageinput: ''});
+      console.log('response');
     })
     .catch (err => {
       console.log(err);
@@ -99,7 +104,7 @@ class MainWindow extends React.Component {
     var messages = [];
     axios.get('http://localhost:3000/api/channelmessages', {headers : { 'channelname' : e }})
     .then((response) => {
-      for (var i = 0; i < response.data.length; i++) {
+      for (var i = response.data.length - 1; i >= 0; i--) {
         messages.push(response.data[i].textfield);
       }
       console.log(response.data);
